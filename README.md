@@ -1,4 +1,4 @@
-# Bytecamp-23
+# Course_Coach - hackathon Bytecamp
 **Overview:** A course recommendation system is an algorithm that suggests courses to students based on their
 interests, academic background, and other relevant factors.To build a course recommendation system, we need to collect data about students and courses, such as their academic history, grades, interests, and course content.
 
