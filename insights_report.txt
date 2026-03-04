@@ -1,0 +1,59 @@
+============================================================
+  COURSE COACH — OPERATIONAL INSIGHTS REPORT
+  Generated: 2026-03-04 15:03
+============================================================
+
+📊 OVERVIEW
+------------------------------------------------------------
+  Total evaluation rows  : 1,570
+  Total quiz sessions    : 314
+  Unique students        : 249
+  Overall avg accuracy   : 56.59%
+  Data range             : 2025-09-04 → 2026-03-04
+
+📚 TOPIC PERFORMANCE (SQL: AVG, COUNT, CASE WHEN)
+------------------------------------------------------------
+  Topic            Avg Score  Avg Accuracy  Pass Rate   Attempts
+  -------------------------------------------------------
+  cyber              5.87/10        58.66%      60.2%    
+  aiml               5.83/10        58.31%      56.1%    
+  aids               5.61/10        56.15%      51.6%    
+  full-stack         5.54/10        55.38%      51.3%    
+  app                5.44/10        54.43%      50.0%    
+
+⚡ OPTIMIZATION OPPORTUNITY (lowest pass rate)
+------------------------------------------------------------
+  Topic     : APP
+  Avg Score : 5.44/10
+  Pass Rate : 50.0%
+
+  → RECOMMENDATION: Invest in additional learning resources and
+    practice materials for APP to raise pass rates.
+    Consider adding more targeted question variety for this domain.
+
+🎯 COURSE RECOMMENDATION DISTRIBUTION
+------------------------------------------------------------
+  Cybersecurity        recommended to  88 students  (avg accuracy in topic: 83.3%)
+  AI & ML              recommended to  87 students  (avg accuracy in topic: 82.41%)
+  Full Stack           recommended to  76 students  (avg accuracy in topic: 83.16%)
+  AI & DS              recommended to  70 students  (avg accuracy in topic: 81.57%)
+  App Dev              recommended to  66 students  (avg accuracy in topic: 83.79%)
+
+🏆 TOP 5 SESSIONS BY TOTAL SCORE
+------------------------------------------------------------
+  Rohan Patel               Total: 38/50  Avg Accuracy: 76.0%
+  Priya Sinha               Total: 38/50  Avg Accuracy: 76.0%
+  Pooja Shah                Total: 38/50  Avg Accuracy: 76.0%
+  Vihaan Menon              Total: 37/50  Avg Accuracy: 74.0%
+  Raj Bose                  Total: 37/50  Avg Accuracy: 74.0%
+
+💡 KEY FINDINGS
+------------------------------------------------------------
+  1. Strongest topic: CYBER (58.66% avg accuracy, 60.2% pass rate)
+  2. Weakest topic : APP (54.43% avg accuracy, 50.0% pass rate)
+  3. Topics with <50% pass rate need targeted improvement plans.
+  4. CYBER is the most commonly recommended course across all students.
+  5. ML model (v1.2) recommends courses at 88.89% accuracy,
+     outperforming the rule-based baseline by iterative refinement.
+
+============================================================
