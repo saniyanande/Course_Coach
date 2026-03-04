@@ -1,0 +1,23 @@
+[
+  {
+    "version": "v1.0",
+    "algorithm": "Na\u00efve Baseline (argmax)",
+    "accuracy": 100.0,
+    "notes": "Rule-based argmax on raw scores. No ML. Baseline reference point.",
+    "trained_at": "2026-03-04T14:44:20.118251"
+  },
+  {
+    "version": "v1.1",
+    "algorithm": "RandomForestClassifier",
+    "accuracy": 85.71,
+    "notes": "Trained on raw scores only (aiml, aids, cyber, fullstack, app). 80/20 split.",
+    "trained_at": "2026-03-04T14:44:20.358768"
+  },
+  {
+    "version": "v1.2",
+    "algorithm": "RandomForestClassifier (full features)",
+    "accuracy": 88.89,
+    "notes": "Added normalized scores and derived features (best, worst, avg, range). Best model.",
+    "trained_at": "2026-03-04T14:44:20.842036"
+  }
+]

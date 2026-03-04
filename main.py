@@ -1,8 +1,11 @@
 import random
 import csv
+import uuid
 import matplotlib.pyplot as plt
 
 from fpdf import FPDF
+from database import initialize_db, insert_session
+from model import predict_recommendation
 
 quiz = {
   "aiml": [
@@ -436,6 +439,9 @@ quiz = {
   ]
 }
 
+# Ensure DB is ready before quiz starts
+initialize_db()
+
 def administer_quiz():
   name = input("What is your name? ")
   email = input("What is your email address? ")
@@ -462,46 +468,99 @@ def administer_quiz():
   with open("quiz_scores.csv", "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(["Topic", "Score"])
-    for topic, score in score.items():
-      writer.writerow([topic, score])
+    for topic, s in score.items():
+      writer.writerow([topic, s])
 
+  # ── Save to SQLite database ──
+  session_id = str(uuid.uuid4())
+  insert_session(session_id, name, email, score)
+  print(f"\n[DB] Results saved to database (session: {session_id[:8]}...)")
+
+  # ── Generate and SAVE the chart FIRST (before PDF embeds it) ──
+  topics_list = list(score.keys())
+  scores_list = list(score.values())
+
+  colors = ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f"]
+  plt.figure(figsize=(9, 5))
+  bars = plt.bar(topics_list, scores_list, color=colors, edgecolor="white", linewidth=0.8)
+  plt.title(f"Quiz Score Report — {name}", fontsize=14, fontweight="bold", pad=15)
+  plt.xlabel("Topic", fontsize=11)
+  plt.ylabel("Score (out of 10)", fontsize=11)
+  plt.ylim(0, 10)
+  plt.xticks(fontsize=10)
+
+  # Label each bar with its score
+  for bar, s in zip(bars, scores_list):
+    plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.15,
+             str(s), ha="center", va="bottom", fontsize=11, fontweight="bold")
+
+  # ── ML-powered recommendation ──
+  ml_recommendation = predict_recommendation(score)
+  print(f"\n🤖 AI Recommendation (ML Model v1.2): {ml_recommendation.upper()}")
+
+  # Highlight the best topic
+  max_s = max(scores_list)
+  max_topic = ml_recommendation  # use ML model output
+  plt.figtext(0.5, 0.01,
+              f"✅ Recommended Course: {max_topic.upper()} (your strongest area — score: {max_s}/10)",
+              ha="center", fontsize=10, color="#333333",
+              bbox=dict(facecolor="#e8f5e9", edgecolor="#4caf50", boxstyle="round,pad=0.4"))
+
+  plt.tight_layout(rect=[0, 0.06, 1, 1])
+  plt.savefig("quiz_scores.png", dpi=150)
+  plt.show()
+
+  print(f"\n📊 Chart saved → quiz_scores.png")
+
+  # ── Build the PDF report (after chart is saved) ──
+  from fpdf import FPDF, XPos, YPos
   pdf = FPDF()
   pdf.add_page()
-  pdf.set_font("Arial", size=12)
-  pdf.cell(200, 10, f"Name: {name}", 0, 1)
-  pdf.cell(200, 10, f"Email: {email}", 0, 1)
-  pdf.cell(200, 10, "", 0, 1)
-  pdf.image("quiz_scores.png", x=10, y=60, w=180)
-  pdf.output(f"{name}_quiz_report.pdf")
+
+  # Header
+  pdf.set_fill_color(41, 98, 155)
+  pdf.rect(0, 0, 210, 28, "F")
+  pdf.set_text_color(255, 255, 255)
+  pdf.set_font("Helvetica", "B", 18)
+  pdf.set_y(8)
+  pdf.cell(0, 12, "Course Coach — Quiz Report", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align="C")
+
+  # Student info
+  pdf.set_text_color(30, 30, 30)
+  pdf.set_fill_color(240, 245, 255)
+  pdf.rect(10, 32, 190, 22, "F")
+  pdf.set_font("Helvetica", "", 11)
+  pdf.set_y(35)
+  pdf.cell(0, 7, f"  Name:  {name}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+  pdf.cell(0, 7, f"  Email: {email}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+
+  # Scores table
+  pdf.set_y(60)
+  pdf.set_font("Helvetica", "B", 12)
+  pdf.cell(0, 8, "Topic Scores", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+  pdf.set_font("Helvetica", "", 11)
+  for t, s in score.items():
+    pct = int((s / 10) * 100)
+    pdf.cell(0, 7, f"  {t.capitalize():<15}  {s}/10   ({pct}%)",
+             new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+
+  # Recommendation
+  pdf.set_y(140)
+  pdf.set_fill_color(232, 245, 233)
+  pdf.set_draw_color(76, 175, 80)
+  pdf.rect(10, pdf.get_y(), 190, 14, "DF")
+  pdf.set_font("Helvetica", "B", 11)
+  pdf.cell(0, 14, f"  ✅ Recommended Course: {max_topic.upper()} (Score: {max_s}/10)",
+           new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+
+  # Embed chart
+  pdf.image("quiz_scores.png", x=10, y=160, w=185)
+
+  pdf_name = f"{name.replace(' ', '_')}_quiz_report.pdf"
+  pdf.output(pdf_name)
+  print(f"📄 PDF report saved → {pdf_name}")
 
   return score
 
 
 score = administer_quiz()
-
-
-topics = []
-scores = []
-with open("quiz_scores.csv") as file:
-  reader = csv.DictReader(file)
-  for row in reader:
-    topics.append(row["Topic"])
-    scores.append(int(row["Score"]))
-
-
-plt.bar(topics, scores)
-plt.title("Quiz Scores")
-plt.xlabel("Topic")
-plt.ylabel("Score")
-
-
-plt.savefig("quiz_scores.png")
-
-max_score = max(scores)
-max_score_topic = topics[scores.index(max_score)]
-print(f"You should choose {max_score_topic} as your score is {max_score}")
-
-
-plt.show()
-
-administer_quiz()
