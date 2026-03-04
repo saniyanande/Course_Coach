@@ -1,80 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Möbius</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Coach — AI-Powered Course Recommendation</title>
+  <meta name="description" content="Course Coach uses machine learning to analyse your quiz performance across 5 domains and recommend the best course for your strengths.">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h2 class="logo">Team Möbius</h2>
-        <nav class="navigation">
-            <a href="#home" class="active">Home</a>
-            <a href="#description">Description</a>
-            <a href="#domains">Domains</a>
-            <a href="#feedback">Feedback</a>
-        </nav>
-    </header>
 
-    <section class="parallax" id="home">
-        <img src="img/hill1.png" id="hill1">
-        <img src="img/hill2.png" id="hill2">
-        <img src="img/hill3.png" id="hill3">
-        <img src="img/hill4.png" id="hill4">
-        <img src="img/hill5.png" id="hill5">
-        <img src="img/tree.png" id="tree">
-        <h2 id="text">LET'S EXPLORE!</h2>
-        <a href="https://replit.com/@saniyanande2/ByteCamp-23Mobius"><button href="#" id="btn">TAKE TEST</button></a>
-        <img src="img/leaf.png" id="leaf">
-        <img src="img/plant.png" id="plant">
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Course<span>Coach</span></a>
+  <ul class="nav-links">
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#pipeline">ML Pipeline</a></li>
+    <li><a href="#domains">Domains</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="quiz.html">Take Quiz</a></li>
+  </ul>
+</nav>
 
-    </section>
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge animate-in">AI-Powered Recommendation System</div>
+    <h1 class="animate-in delay-1">
+      Discover Your<br><span class="gradient-text">Ideal Course</span><br>with AI
+    </h1>
+    <p class="animate-in delay-2">
+      Take a 50-question assessment across 5 tech domains.
+      Our RandomForest ML model analyses your strengths with 88.89% accuracy
+      and recommends the course you're most likely to excel in.
+    </p>
+    <div class="hero-actions animate-in delay-3">
+      <a href="quiz.html" class="btn-primary">🎯 Take the Quiz</a>
+      <a href="#dashboard" class="btn-secondary">📊 View Analytics</a>
+    </div>
 
-    <section class="sec" id="description">
-        <h2>Description</h2>
+    <!-- Live stats from DB -->
+    <div class="hero-stats animate-in delay-4">
+      <div class="hero-stat">
+        <span class="num" id="stat-evals">1,570</span>
+        <span class="lbl">Evaluations</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num" id="stat-sessions">314</span>
+        <span class="lbl">Sessions</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num" id="stat-acc">88.89%</span>
+        <span class="lbl">Model Accuracy</span>
+      </div>
+      <div class="hero-stat">
+        <span class="num">5</span>
+        <span class="lbl">Domains</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <p>By, Choosing a course of study is a critical decision that can shape a student's future. Many students face difficulties in selecting a course that aligns with their interests, abilities, and career aspirations. One of the primary challenges that students face is the various number of online courses available. Students may find it difficult to evaluate each course's suitability and identify the one that suits them best. Additionally, social pressure and parental expectations may influence a student's decision, leading them to choose a course that they may not enjoy or excel at.
-            <br><br>
-            The purpose of this project is to develop a website that provides personalised course recommendations for students based on their academic performance and interests. The website aims to help students make informed decisions about their education and career by analysing data on student’s performances. The project involves developing a course recommendation engine that uses machine learning algorithms to match students with suitable courses based on their performance data. 
-            <br><br>
+<!-- ── LIVE DASHBOARD ── -->
+<section id="dashboard">
+  <span class="section-label">Live Analytics</span>
+  <h2 class="section-title">Performance Dashboard</h2>
+  <p class="section-sub">Real-time data from <span id="db-total">1,570</span> quiz evaluations stored in our SQLite database, queried with Python & SQL.</p>
 
-        <h2 id="domains">Domains</h2>
+  <!-- Stat Cards -->
+  <div class="stats-grid" id="stat-cards">
+    <div class="stat-card">
+      <div class="icon">📋</div>
+      <div class="val" id="c-evals">1,570</div>
+      <div class="label">Total Evaluations</div>
+    </div>
+    <div class="stat-card">
+      <div class="icon">👥</div>
+      <div class="val" id="c-sessions">314</div>
+      <div class="label">Quiz Sessions</div>
+    </div>
+    <div class="stat-card">
+      <div class="icon">🎯</div>
+      <div class="val" id="c-acc">56.6%</div>
+      <div class="label">Avg Student Accuracy</div>
+    </div>
+    <div class="stat-card">
+      <div class="icon">🤖</div>
+      <div class="val">88.89%</div>
+      <div class="label">ML Model Accuracy</div>
+    </div>
+  </div>
 
-        <h3>AI & ML :</h3>
-        <p>Artificial Intelligence (AI) refers to computer systems that can perform tasks that typically require human intelligence, such as perception, reasoning, learning, decision-making, and language understanding. AI algorithms are designed to learn from data and improve over time, allowing machines to identify patterns and make predictions with increasing accuracy. AI has many applications across various industries and has the potential to revolutionize the way we live and work, but also presents ethical and social challenges.<br>
-        Machine learning is a subfield of artificial intelligence that focuses on developing computer algorithms that can automatically learn from data without being explicitly programmed. The goal of machine learning is to create predictive models that can identify patterns and make accurate predictions or decisions based on input data. There are several types of machine learning algorithms, including supervised learning, unsupervised learning, and reinforcement learning, each with its own unique characteristics and applications. Machine learning has many practical applications, such as speech recognition, image classification, natural language processing, and predictive analytics.<br><br>
-        </p>
+  <!-- Topic Performance Bars -->
+  <div style="margin-top:56px">
+    <span class="section-label">By Topic</span>
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--white);margin-bottom:8px;">Topic-Level Performance</h3>
+    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:0">Pass rate ≥ 6/10 considered a pass. Weakest topics highlighted for optimization.</p>
+  </div>
+  <div class="topic-grid" id="topic-grid">
+    <!-- Injected by JS from stats.json -->
+  </div>
+</section>
 
+<!-- ── ML PIPELINE ── -->
+<section id="pipeline">
+  <span class="section-label">Under the Hood</span>
+  <h2 class="section-title">ML Recommendation Pipeline</h2>
+  <p class="section-sub">Three-version iterative training process using scikit-learn's RandomForestClassifier, improving accuracy with each iteration.</p>
 
-        <h3>AI & DS :</h3>
-        <p>Artificial Intelligence (AI) refers to computer systems that can perform tasks that typically require human intelligence, such as perception, reasoning, learning, decision-making, and language understanding. AI algorithms are designed to learn from data and improve over time, allowing machines to identify patterns and make predictions with increasing accuracy. AI has many applications across various industries and has the potential to revolutionize the way we live and work, but also presents ethical and social challenges.<br>
-        Data science is an interdisciplinary field that involves using scientific methods, processes, algorithms, and systems to extract insights and knowledge from structured and unstructured data. It combines elements of statistics, mathematics, computer science, and domain-specific knowledge to analyze and interpret data, identify patterns and trends, and communicate insights to stakeholders. Data science involves various stages, including data collection, data cleaning, data analysis, and data visualization. It has many applications in business, healthcare, finance, social sciences, and other fields, and is used to solve complex problems, make data-driven decisions, and create predictive models.<br><br>
-        </p>
+  <div class="pipeline-cards">
+    <div class="pipeline-card">
+      <div class="p-num">01</div>
+      <div class="p-title">Data Collection</div>
+      <div class="p-desc">520+ quiz sessions stored in SQLite. Each session records scores across 5 domains with timestamps for trend analysis.</div>
+      <span class="p-tag">SQLite · Python</span>
+    </div>
+    <div class="pipeline-card">
+      <div class="p-num">02</div>
+      <div class="p-title">Feature Engineering</div>
+      <div class="p-desc">14 features per student: raw scores, normalized scores (÷10), best/worst/avg/range — all derived with pandas.</div>
+      <span class="p-tag">pandas · numpy</span>
+    </div>
+    <div class="pipeline-card">
+      <div class="p-num">03</div>
+      <div class="p-title">Model Training</div>
+      <div class="p-desc">RandomForest with 200 estimators, 80/20 train-test split, 5-fold cross-validation. Best model saved as model.pkl.</div>
+      <span class="p-tag">scikit-learn · joblib</span>
+    </div>
+    <div class="pipeline-card">
+      <div class="p-num">04</div>
+      <div class="p-title">Recommendation</div>
+      <div class="p-desc">Model predicts strongest course domain from student's feature vector. Output shown in quiz results and PDF report.</div>
+      <span class="p-tag">RandomForestClassifier</span>
+    </div>
+  </div>
 
+  <!-- Model version table -->
+  <div style="margin-top:52px">
+    <span class="section-label">Iteration History</span>
+    <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--white);margin-bottom:24px;">Model Version Log</h3>
+  </div>
+  <div class="model-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Algorithm</th>
+          <th>Accuracy</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="model-tbody">
+        <tr>
+          <td>v1.0</td>
+          <td>Naïve Baseline (argmax)</td>
+          <td><span class="badge-acc badge-base">Baseline</span></td>
+          <td>Rule-based, no ML</td>
+        </tr>
+        <tr>
+          <td>v1.1</td>
+          <td>RandomForestClassifier</td>
+          <td><span class="badge-acc badge-good">85.71%</span></td>
+          <td>Raw scores only</td>
+        </tr>
+        <tr>
+          <td>v1.2</td>
+          <td>RandomForestClassifier (full features)</td>
+          <td><span class="badge-acc badge-best">88.89%</span></td>
+          <td>+ normalized & derived features</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
-        <h3>CYBERSECURITY :</h3>
-        <p>Cybersecurity is the practice of protecting computer systems, networks, and sensitive information from unauthorized access, use, theft, damage, or disruption. It involves the use of technologies, processes, and practices to ensure the confidentiality, integrity, and availability of digital assets. Cybersecurity threats can come from various sources, including cybercriminals, hackers, viruses, malware, and insiders. Cybersecurity measures include network security, data encryption, access controls, identity and access management, incident response, and disaster recovery. Effective cybersecurity is essential to protect organizations and individuals from cyber threats and maintain the trust and integrity of digital systems.<br><br></p>
+<!-- ── DOMAINS ── -->
+<section id="domains">
+  <span class="section-label">What You'll Be Assessed On</span>
+  <h2 class="section-title">5 Tech Domains</h2>
+  <p class="section-sub">50 questions spanning the 5 most in-demand tech career paths. Your relative strengths determine your recommendation.</p>
 
+  <div class="domain-grid">
+    <div class="domain-card">
+      <div class="domain-icon">🤖</div>
+      <h3>AI & Machine Learning</h3>
+      <p>Supervised, unsupervised, reinforcement learning. Algorithms, neural networks, and ML problem types.</p>
+      <span class="domain-tag tag-aiml">10 Questions</span>
+    </div>
+    <div class="domain-card">
+      <div class="domain-icon">📊</div>
+      <h3>AI & Data Science</h3>
+      <p>Data pipelines, statistical analysis, decision trees, clustering, and AI applications in data-driven systems.</p>
+      <span class="domain-tag tag-ds">10 Questions</span>
+    </div>
+    <div class="domain-card">
+      <div class="domain-icon">🔐</div>
+      <h3>Cybersecurity</h3>
+      <p>Network security, threat detection, encryption, endpoint protection, and attack classification.</p>
+      <span class="domain-tag tag-cyber">10 Questions</span>
+    </div>
+    <div class="domain-card">
+      <div class="domain-icon">🌐</div>
+      <h3>Full-Stack Web Dev</h3>
+      <p>HTML, CSS, JavaScript, HTTP protocols, REST APIs, and full-stack web development fundamentals.</p>
+      <span class="domain-tag tag-web">10 Questions</span>
+    </div>
+    <div class="domain-card">
+      <div class="domain-icon">📱</div>
+      <h3>App Development</h3>
+      <p>Android architecture, activities, lifecycle, SQLite integration, ADB, and mobile development basics.</p>
+      <span class="domain-tag tag-app">10 Questions</span>
+    </div>
+  </div>
+</section>
 
-        <h3>WEB DEV :</h3>
-        <p>Full stack web development involves the development of web applications that include both front-end and back-end components, as well as the underlying database and infrastructure. Full stack developers are proficient in multiple programming languages and frameworks, and are capable of developing, testing, and deploying entire web applications from end-to-end. Full stack web development is a critical skill set in modern web development and is in high demand by businesses and organizations looking to develop sophisticated and scalable web applications.<br><br></p>
+<!-- ── HOW IT WORKS ── -->
+<section id="how">
+  <span class="section-label">The Process</span>
+  <h2 class="section-title">How It Works</h2>
+  <p class="section-sub" style="margin-bottom:0">From quiz to recommendation in four steps powered by Python and machine learning.</p>
 
+  <div class="steps-list">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Take the 50-Question Assessment</h4>
+        <p>Answer 10 randomized MCQs in each domain. Options are shuffled every run to prevent pattern memorization.</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Scores Logged to SQLite Database</h4>
+        <p>Your session is assigned a unique ID and all 5 topic scores are stored with timestamp for historical analysis.</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>ML Model Predicts Your Ideal Course</h4>
+        <p>Our RandomForest model (v1.2, 88.89% accuracy) processes your 14-feature vector and returns the best-fit course domain.</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Visual Report Generated</h4>
+        <p>A bar chart and PDF report are saved with your scores, recommendation, and topic breakdown for future reference.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <h3>APP DEV :</h3>
-        <p>App development is the process of creating software applications that run on mobile devices, such as smartphones and tablets. App developers use programming languages such as Java, Swift, or Kotlin to build native apps for specific mobile operating systems like iOS or Android, or cross-platform apps that can run on multiple operating systems. App development involves various stages, including planning, design, development, testing, and deployment. App developers also need to consider user experience, security, and performance optimization in their work. Mobile apps have become an essential part of modern life, and app development is a critical skill set in the tech industry.<br><br></p>
-        </p>
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">CourseCoach</div>
+  <div class="footer-links">
+    <a href="quiz.html">Take Quiz</a>
+    <a href="https://github.com/saniyanande/Course_Coach" target="_blank">GitHub</a>
+    <a href="https://forms.gle/EQUukV2p2fP2RD7h8" target="_blank">Feedback</a>
+  </div>
+  <div class="footer-copy">Bytecamp '23 · Team Möbius</div>
+</footer>
 
+<script>
+// ── Load stats.json and populate dashboard ──
+const TOPIC_LABELS = {
+  aiml: 'AI & ML', aids: 'AI & DS',
+  cyber: 'Cybersecurity', 'full-stack': 'Full Stack', app: 'App Dev'
+};
+const TOPIC_COLORS = {
+  aiml: '#64ffda', aids: '#7b61ff',
+  cyber: '#f87171', 'full-stack': '#fb923c', app: '#4ade80'
+};
 
-        <h3 id="feedback">FEEDBACK</h3>
-        <p>Feel free to share your experience. <br>
-            Kindly Fill the feedback form below!</p><br>
-            <p>CLICK HERE : </p><a class="fd" href="https://forms.gle/EQUukV2p2fP2RD7h8">FEEDBACK FORM</a>
-    </section>
+fetch('stats.json')
+  .then(r => r.json())
+  .then(data => {
+    // Hero stats
+    document.getElementById('stat-evals').textContent    = data.total_evaluations.toLocaleString();
+    document.getElementById('stat-sessions').textContent = data.total_sessions.toLocaleString();
+    document.getElementById('stat-acc').textContent      = data.model_accuracy + '%';
+    document.getElementById('db-total').textContent      = data.total_evaluations.toLocaleString();
 
-           
+    // Stat cards
+    document.getElementById('c-evals').textContent    = data.total_evaluations.toLocaleString();
+    document.getElementById('c-sessions').textContent = data.total_sessions.toLocaleString();
+    document.getElementById('c-acc').textContent      = data.overall_accuracy + '%';
 
-    <script src="script.js"></script>
+    // Topic grid
+    const grid = document.getElementById('topic-grid');
+    grid.innerHTML = '';
+    data.by_topic.forEach(t => {
+      const label    = TOPIC_LABELS[t.topic] || t.topic;
+      const color    = TOPIC_COLORS[t.topic]  || '#64ffda';
+      const passClass = t.pass_rate >= 55 ? 'pass-good' : 'pass-warn';
+      grid.innerHTML += `
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-name">${label}</span>
+            <span class="topic-acc">${t.avg_accuracy}%</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${t.avg_accuracy}%;background:${color}"></div>
+          </div>
+          <div class="topic-meta">
+            <span>Avg score: <b style="color:var(--white)">${t.avg_score}/10</b></span>
+            <span class="${passClass}">Pass rate: ${t.pass_rate}%</span>
+          </div>
+        </div>`;
+    });
+  })
+  .catch(() => console.log('stats.json not found — showing defaults'));
+
+// ── Navbar scroll shadow ──
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').style.boxShadow =
+    window.scrollY > 20 ? '0 4px 30px rgba(0,0,0,0.4)' : 'none';
+});
+
+// ── Animate on scroll ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('animate-in'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.stat-card, .topic-card, .pipeline-card, .domain-card, .step-item')
+  .forEach(el => obs.observe(el));
+</script>
 </body>
 </html>

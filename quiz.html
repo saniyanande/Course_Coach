@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Coach — Take the Quiz</title>
+  <meta name="description" content="Take the Course Coach quiz to discover your ideal tech course domain using our AI recommendation engine.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">Course<span>Coach</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#dashboard">Dashboard</a></li>
+    <li><a href="index.html#pipeline">ML Pipeline</a></li>
+    <li><a href="index.html#domains">Domains</a></li>
+    <li><a href="quiz.html" style="color:var(--accent)">Take Quiz</a></li>
+  </ul>
+</nav>
+
+<div class="quiz-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="quiz-container">
+
+    <!-- ── REGISTER ── -->
+    <div class="quiz-welcome" id="register-panel">
+      <div style="font-size:2.8rem;margin-bottom:16px">🎯</div>
+      <h2>Course Assessment</h2>
+      <p>50 questions across 5 domains. Our ML model (88.89% accuracy) will recommend your ideal course based on your performance.</p>
+      <div class="form-group">
+        <label for="name-input">Your Name</label>
+        <input type="text" id="name-input" placeholder="e.g. Saniya Nande" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="email-input">Email Address</label>
+        <input type="email" id="email-input" placeholder="e.g. saniya@edu.in" autocomplete="off">
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:20px;text-align:left">
+        ⏱️ 20 seconds per question &nbsp;·&nbsp; 10 questions per domain &nbsp;·&nbsp; Answers revealed after each question
+      </p>
+      <button class="btn-start" id="start-btn" onclick="startQuiz()">Start Assessment →</button>
+    </div>
+
+    <!-- ── QUIZ ── -->
+    <div class="quiz-area" id="quiz-panel">
+      <div class="quiz-header">
+        <span class="topic-badge" id="topic-badge">AI & ML</span>
+        <div class="timer" id="timer">⏱ 20s</div>
+      </div>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-info">
+          <span id="progress-text">Question 1 of 50</span>
+          <span id="score-text">Score: 0</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-fill" style="width:2%"></div>
+        </div>
+      </div>
+
+      <div class="question-text" id="question-text">Loading...</div>
+
+      <div class="options-grid" id="options-grid"></div>
+
+      <div class="feedback-msg" id="feedback-msg"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+
+    <!-- ── RESULTS ── -->
+    <div class="results-area" id="results-panel">
+      <div style="font-size:2.8rem;margin-bottom:12px">🏆</div>
+      <h2 id="results-name">Great work!</h2>
+      <p class="sub" id="results-sub">Here's your performance breakdown and AI course recommendation.</p>
+
+      <div class="recommendation-box">
+        <div class="rec-label">🤖 ML Model Recommendation</div>
+        <div class="rec-course" id="rec-course">AI & ML</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-top:8px" id="rec-reason"></div>
+      </div>
+
+      <div class="result-bars" id="result-bars"></div>
+
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn-restart" onclick="restartQuiz()">🔁 Retake Quiz</button>
+        <a href="index.html#dashboard" style="padding:14px 28px;background:rgba(100,255,218,0.1);border:1px solid var(--accent);color:var(--accent);border-radius:10px;text-decoration:none;font-size:0.9rem;font-weight:600;transition:var(--transition)">📊 View Dashboard</a>
+      </div>
+    </div>
+
+  </div><!-- /quiz-container -->
+</div>
+
+<script>
+// ──────────────────────────────────────────────────
+// QUIZ DATA
+// ──────────────────────────────────────────────────
+const QUIZ_DATA = {
+  "AI & ML": [
+    { q: "Which option is NOT a type of machine learning?", options: ["Semi-supervised learning","Supervised learning","Reinforcement learning","Unsupervised learning"], answer: "Semi-supervised learning" },
+    { q: "Facial identity recognition is an example of which ML task?", options: ["Prediction","Recognition Patterns","Recognizing anomalies","Generating patterns"], answer: "Recognition Patterns" },
+    { q: "Which of the following are common ML problem classes?", options: ["Regression","Classification","Clustering","All of the above"], answer: "All of the above" },
+    { q: "PAC stands for?", options: ["Probably Approx Cost","Probably Approximate Correct","Probably Approx Communication","Probably Approximate Computation"], answer: "Probably Approximate Correct" },
+    { q: "How many layers does a Radial Basis Function neural network have?", options: ["1","2","3","4"], answer: "3" },
+    { q: "Which is NOT a machine learning discipline?", options: ["Information Technology","Optimisation + control","Physics","Neuro statistics"], answer: "Neuro statistics" },
+    { q: "What does K stand for in K-Means?", options: ["Number of clusters","Number of data","Number of attributes","Number of iterations"], answer: "Number of clusters" },
+    { q: "Which function creates the most common graph types in R?", options: ["plot","quickplot","qplot","All of the above"], answer: "qplot" },
+    { q: "Which is NOT machine learning?", options: ["Artificial Intelligence","Rule based inference","Both A and B","None of the above"], answer: "Rule based inference" },
+    { q: "Applying ML methods to large databases is called?", options: ["Big data computing","Internet of things","Data mining","Artificial Intelligence"], answer: "Data mining" }
+  ],
+  "AI & DS": [
+    { q: "How many categories is Artificial Intelligence classified into?", options: ["Depends on input","5","2","3"], answer: "3" },
+    { q: "Which is the most common AI programming language?", options: ["Python","Java","PHP","Lisp"], answer: "Python" },
+    { q: "Which is NOT an AI application?", options: ["Computer Vision","Natural Language Processing","Digital Assistants","Database Management System"], answer: "Database Management System" },
+    { q: "Game trees use which algorithm for win/loss decisions?", options: ["DFS","BFS","Heuristic Search","Min/Max Algorithm"], answer: "Min/Max Algorithm" },
+    { q: "How many types of observing environments are there in AI?", options: ["2","3","1","0"], answer: "2" },
+    { q: "How many types of quantification exist in AI?", options: ["1","2","3","4"], answer: "2" },
+    { q: "Machines that handle vague information use which AI field?", options: ["Functional Logic","Fuzzy Logic","Boolean Logic","Human Logic"], answer: "Fuzzy Logic" },
+    { q: "Which of the following are valid ML algorithms?", options: ["Linear Regression","K Means Clustering","Naive Bayes","All of the above"], answer: "All of the above" },
+    { q: "How does a decision tree reach a decision?", options: ["No test","Single Test","Double Test","Multiple sequences of tests"], answer: "Multiple sequences of tests" },
+    { q: "How is pixel brightness increased on screen?", options: ["Increasing light on screen","Using mirrors","Using sound waves","None"], answer: "Increasing light on screen" }
+  ],
+  "Cybersecurity": [
+    { q: "What term means only authorised users can access information?", options: ["Confidentiality","Availability","Integrity","Non-repudiation"], answer: "Confidentiality" },
+    { q: "What is the oldest phone hacking technique?", options: ["Spamming","Phreaking","Cracking","Phishing"], answer: "Phreaking" },
+    { q: "Which is used to avoid browser-based hacking?", options: ["Adware remover","Incognito mode","Anti-malware","Remote browser access"], answer: "Remote browser access" },
+    { q: "Which platform protects information in the cloud?", options: ["AWS","Cloud workload protection platforms","Cloud security protocols","One Drive"], answer: "Cloud workload protection platforms" },
+    { q: "Which technique hides information inside a picture?", options: ["Image rendering","Steganography","Rootkits","Bitmapping"], answer: "Steganography" },
+    { q: "EDR stands for?", options: ["Endless detection and response","Endpoint detection and response","Endless detection and recovery","Endpoint detection and recovery"], answer: "Endpoint detection and response" },
+    { q: "Which is used for monitoring and analysing network traffic?", options: ["MDR","Cloud access broker","Network traffic analysis","Network firewall"], answer: "Network traffic analysis" },
+    { q: "Compromising confidential information falls under?", options: ["Threat","Bug","Attack","Vulnerability"], answer: "Threat" },
+    { q: "Which is a class of computer threat?", options: ["Phishing","DOS attack","Soliciting","Both B and C"], answer: "DOS attack" },
+    { q: "Which software detects and removes viruses?", options: ["Antivirus","Adware","Malware","None"], answer: "Antivirus" }
+  ],
+  "Full Stack": [
+    { q: "Which operator allocates memory to arrays in JavaScript?", options: ["New","new malloc","alloc","malloc"], answer: "New" },
+    { q: "Cookies were originally designed for?", options: ["Server-side programming","Client-side programming","Both","None"], answer: "Server-side programming" },
+    { q: "Variables in JavaScript are used for?", options: ["Varying randomly","Storing numbers, dates, and values","Used as header files","None"], answer: "Storing numbers, dates, and values" },
+    { q: "SNMP uses which port number?", options: ["164","163","160","161"], answer: "161" },
+    { q: "W3C stands for?", options: ["World Wide Websites community","World Wide Web community","World Wide Websites consortium","World Wide Web consortium"], answer: "World Wide Web consortium" },
+    { q: "When is the body tag used?", options: ["After FORM tag","After Title tag","After EM tag","After HEAD tag"], answer: "After HEAD tag" },
+    { q: "Which attribute defines the relationship between document and URL?", options: ["URL","REV","REL","None"], answer: "REL" },
+    { q: "XPATH is used to?", options: ["Address the server","Store IP address","Address document by location path","None"], answer: "Address document by location path" },
+    { q: "What does the <b> tag do?", options: ["Makes text bold","Writes black font","Changes font size","None"], answer: "Makes text bold" },
+    { q: "What does the HTML style attribute do?", options: ["Adds styles to an HTML element","Uniquely identifies styles","Both","None"], answer: "Adds styles to an HTML element" }
+  ],
+  "App Dev": [
+    { q: "What is an Activity in Android?", options: ["Android class","Android package","A single screen in an application","None"], answer: "A single screen in an application" },
+    { q: "Android is based on Linux for which reason(s)?", options: ["Networking","Portability","Security","All of the above"], answer: "All of the above" },
+    { q: "Which VM does Android OS use?", options: ["Dalvik","JVM","Simple VM","None"], answer: "Dalvik" },
+    { q: "What is AndroidManifest.xml?", options: ["Layout info","All app information","Activity info","None"], answer: "All app information" },
+    { q: "What is a Content Provider used for?", options: ["Sharing data between apps","Storing in database","Sending data between apps","None"], answer: "Sharing data between apps" },
+    { q: "Android developers can test apps on?", options: ["Emulators in Android SDK","Android Phone","Third-Party Emulator","All the above"], answer: "All the above" },
+    { q: "ADB stands for?", options: ["Android Delete Bridge","Android Debug Bridge","Android Destroy Bridge","Android Developed Bridge"], answer: "Android Debug Bridge" },
+    { q: "The src folder contains?", options: ["Manifest","Java Source Code","XML","All of them"], answer: "Java Source Code" },
+    { q: "What is the lowest layer of Android architecture?", options: ["Applications","Application Framework","Linux Kernel","System libraries"], answer: "Linux Kernel" },
+    { q: "Android's built-in database is?", options: ["MySQL","SQLite","Oracle","None"], answer: "SQLite" }
+  ]
+};
+
+const TOPIC_LIST   = Object.keys(QUIZ_DATA);
+const TOPIC_COLORS = ['#64ffda','#7b61ff','#f87171','#fb923c','#4ade80'];
+
+// State
+let currentTopicIdx = 0;
+let currentQIdx     = 0;
+let scores          = {};
+let answered        = false;
+let timerInterval   = null;
+let timeLeft        = 20;
+let userName        = '';
+let shuffledQuestions = {};
+
+// ──────────────────────────────────────────────────
+// HELPERS
+// ──────────────────────────────────────────────────
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+function totalAnswered() {
+  return currentTopicIdx * 10 + currentQIdx;
+}
+
+// ──────────────────────────────────────────────────
+// START
+// ──────────────────────────────────────────────────
+function startQuiz() {
+  const name  = document.getElementById('name-input').value.trim();
+  const email = document.getElementById('email-input').value.trim();
+  if (!name)  { alert('Please enter your name.'); return; }
+  if (!email) { alert('Please enter your email.'); return; }
+  userName = name;
+
+  // Pre-shuffle questions and options
+  TOPIC_LIST.forEach(topic => {
+    shuffledQuestions[topic] = shuffle(QUIZ_DATA[topic]).map(q => ({
+      ...q, options: shuffle(q.options)
+    }));
+  });
+  TOPIC_LIST.forEach(t => scores[t] = 0);
+
+  document.getElementById('register-panel').style.display = 'none';
+  document.getElementById('quiz-panel').style.display     = 'block';
+  loadQuestion();
+}
+
+// ──────────────────────────────────────────────────
+// LOAD QUESTION
+// ──────────────────────────────────────────────────
+function loadQuestion() {
+  answered = false;
+  const topic   = TOPIC_LIST[currentTopicIdx];
+  const q       = shuffledQuestions[topic][currentQIdx];
+  const total   = 50;
+  const done    = totalAnswered();
+  const color   = TOPIC_COLORS[currentTopicIdx];
+
+  // Header
+  document.getElementById('topic-badge').textContent  = topic;
+  document.getElementById('topic-badge').style.background = `${color}18`;
+  document.getElementById('topic-badge').style.color  = color;
+
+  // Progress
+  document.getElementById('progress-text').textContent =
+    `Question ${done + 1} of ${total}  (${topic})`;
+  document.getElementById('score-text').textContent = `Score: ${Object.values(scores).reduce((a,b)=>a+b,0)}`;
+  document.getElementById('progress-fill').style.width = `${((done) / total) * 100}%`;
+
+  // Question
+  document.getElementById('question-text').textContent = q.q;
+
+  // Options
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.id = `opt-${i}`;
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt}`;
+    btn.onclick = () => selectAnswer(opt, q.answer, i, q.options);
+    grid.appendChild(btn);
+  });
+
+  // Feedback + next
+  const fb = document.getElementById('feedback-msg');
+  fb.className = 'feedback-msg'; fb.textContent = '';
+  document.getElementById('next-btn').className = 'next-btn';
+
+  // Timer
+  startTimer();
+}
+
+// ──────────────────────────────────────────────────
+// TIMER
+// ──────────────────────────────────────────────────
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 20;
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerDisplay();
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      if (!answered) timeExpired();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timer');
+  el.textContent = `⏱ ${timeLeft}s`;
+  el.className   = timeLeft <= 5 ? 'timer warning' : 'timer';
+}
+
+function timeExpired() {
+  answered = true;
+  const topic = TOPIC_LIST[currentTopicIdx];
+  const q     = shuffledQuestions[topic][currentQIdx];
+  // Reveal correct answer
+  q.options.forEach((opt, i) => {
+    const btn = document.getElementById(`opt-${i}`);
+    btn.disabled = true;
+    if (opt === q.answer) btn.classList.add('correct');
+  });
+  showFeedback('⏰ Time\'s up! The correct answer has been highlighted.', 'wrong');
+  document.getElementById('next-btn').classList.add('show');
+}
+
+// ──────────────────────────────────────────────────
+// SELECT ANSWER
+// ──────────────────────────────────────────────────
+function selectAnswer(chosen, correct, idx, allOptions) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+  const topic = TOPIC_LIST[currentTopicIdx];
+
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+  if (chosen === correct) {
+    document.getElementById(`opt-${idx}`).classList.add('correct');
+    scores[topic]++;
+    showFeedback('✅ Correct!', 'correct');
+  } else {
+    document.getElementById(`opt-${idx}`).classList.add('wrong');
+    // Highlight correct
+    allOptions.forEach((opt, i) => {
+      if (opt === correct) document.getElementById(`opt-${i}`).classList.add('correct');
+    });
+    showFeedback(`❌ Incorrect. Correct answer: "${correct}"`, 'wrong');
+  }
+
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function showFeedback(msg, type) {
+  const el = document.getElementById('feedback-msg');
+  el.textContent = msg;
+  el.className   = `feedback-msg show ${type}`;
+}
+
+// ──────────────────────────────────────────────────
+// NEXT QUESTION
+// ──────────────────────────────────────────────────
+function nextQuestion() {
+  currentQIdx++;
+  if (currentQIdx >= 10) {
+    currentQIdx = 0;
+    currentTopicIdx++;
+  }
+  if (currentTopicIdx >= TOPIC_LIST.length) {
+    showResults();
+  } else {
+    loadQuestion();
+  }
+}
+
+// ──────────────────────────────────────────────────
+// RESULTS
+// ──────────────────────────────────────────────────
+function showResults() {
+  clearInterval(timerInterval);
+  document.getElementById('quiz-panel').style.display    = 'none';
+  document.getElementById('results-panel').style.display = 'block';
+
+  const total     = Object.values(scores).reduce((a,b)=>a+b,0);
+  const bestTopic = Object.keys(scores).reduce((a,b) => scores[a]>scores[b]?a:b);
+  const bestScore = scores[bestTopic];
+
+  document.getElementById('results-name').textContent = `${userName}, great effort!`;
+  document.getElementById('results-sub').textContent  =
+    `You scored ${total}/50 overall. Here's your topic breakdown.`;
+  document.getElementById('rec-course').textContent   = bestTopic;
+  document.getElementById('rec-reason').textContent   =
+    `You scored ${bestScore}/10 in ${bestTopic} — your strongest domain.`;
+
+  // Score bars
+  const barsEl = document.getElementById('result-bars');
+  barsEl.innerHTML = '';
+  TOPIC_LIST.forEach((topic, i) => {
+    const s = scores[topic];
+    const pct = (s / 10) * 100;
+    const color = TOPIC_COLORS[i];
+    barsEl.innerHTML += `
+      <div class="result-bar-item">
+        <span class="result-bar-label">${topic}</span>
+        <div class="result-bar-track">
+          <div class="result-bar-fill" style="width:${pct}%;background:${color}" id="rb-${i}"></div>
+        </div>
+        <span class="result-bar-val">${s}/10</span>
+      </div>`;
+  });
+
+  // Animate bars
+  setTimeout(() => {
+    TOPIC_LIST.forEach((_, i) => {
+      const fill = document.getElementById(`rb-${i}`);
+      if (fill) fill.style.transition = 'width 1s ease';
+    });
+  }, 100);
+
+  // Update progress bar to 100%
+  document.getElementById('progress-fill').style.width = '100%';
+}
+
+// ──────────────────────────────────────────────────
+// RESTART
+// ──────────────────────────────────────────────────
+function restartQuiz() {
+  currentTopicIdx = 0; currentQIdx = 0;
+  TOPIC_LIST.forEach(t => scores[t] = 0);
+  shuffledQuestions = {};
+  document.getElementById('results-panel').style.display  = 'none';
+  document.getElementById('register-panel').style.display = 'block';
+}
+</script>
+</body>
+</html>

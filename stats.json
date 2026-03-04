@@ -1,0 +1,83 @@
+{
+  "total_evaluations": 1570,
+  "total_sessions": 314,
+  "overall_accuracy": 56.6,
+  "by_topic": [
+    {
+      "topic": "cyber",
+      "avg_accuracy": 58.7,
+      "avg_score": 5.9,
+      "pass_rate": 60.2
+    },
+    {
+      "topic": "aiml",
+      "avg_accuracy": 58.3,
+      "avg_score": 5.8,
+      "pass_rate": 56.1
+    },
+    {
+      "topic": "aids",
+      "avg_accuracy": 56.1,
+      "avg_score": 5.6,
+      "pass_rate": 51.6
+    },
+    {
+      "topic": "full-stack",
+      "avg_accuracy": 55.4,
+      "avg_score": 5.5,
+      "pass_rate": 51.3
+    },
+    {
+      "topic": "app",
+      "avg_accuracy": 54.4,
+      "avg_score": 5.4,
+      "pass_rate": 50.0
+    }
+  ],
+  "recommendation_distribution": [
+    {
+      "topic": "cyber",
+      "count": 88
+    },
+    {
+      "topic": "aiml",
+      "count": 87
+    },
+    {
+      "topic": "full-stack",
+      "count": 76
+    },
+    {
+      "topic": "aids",
+      "count": 70
+    },
+    {
+      "topic": "app",
+      "count": 66
+    }
+  ],
+  "model_versions": [
+    {
+      "version": "v1.0",
+      "algorithm": "Na\u00efve Baseline (argmax)",
+      "accuracy": 100.0,
+      "notes": "Rule-based argmax on raw scores. No ML. Baseline reference point.",
+      "trained_at": "2026-03-04T14:44:20.118251"
+    },
+    {
+      "version": "v1.1",
+      "algorithm": "RandomForestClassifier",
+      "accuracy": 85.71,
+      "notes": "Trained on raw scores only (aiml, aids, cyber, fullstack, app). 80/20 split.",
+      "trained_at": "2026-03-04T14:44:20.358768"
+    },
+    {
+      "version": "v1.2",
+      "algorithm": "RandomForestClassifier (full features)",
+      "accuracy": 88.89,
+      "notes": "Added normalized scores and derived features (best, worst, avg, range). Best model.",
+      "trained_at": "2026-03-04T14:44:20.842036"
+    }
+  ],
+  "model_accuracy": 88.89
+}
