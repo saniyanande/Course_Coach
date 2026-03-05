@@ -483,7 +483,7 @@ def administer_quiz():
   colors = ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f"]
   plt.figure(figsize=(9, 5))
   bars = plt.bar(topics_list, scores_list, color=colors, edgecolor="white", linewidth=0.8)
-  plt.title(f"Quiz Score Report — {name}", fontsize=14, fontweight="bold", pad=15)
+  plt.title(f"Quiz Score Report - {name}", fontsize=14, fontweight="bold", pad=15)
   plt.xlabel("Topic", fontsize=11)
   plt.ylabel("Score (out of 10)", fontsize=11)
   plt.ylim(0, 10)
@@ -502,13 +502,13 @@ def administer_quiz():
   max_s = max(scores_list)
   max_topic = ml_recommendation  # use ML model output
   plt.figtext(0.5, 0.01,
-              f"✅ Recommended Course: {max_topic.upper()} (your strongest area — score: {max_s}/10)",
+              f">> Recommended Course: {max_topic.upper()} (your strongest area - score: {max_s}/10)",
               ha="center", fontsize=10, color="#333333",
               bbox=dict(facecolor="#e8f5e9", edgecolor="#4caf50", boxstyle="round,pad=0.4"))
 
   plt.tight_layout(rect=[0, 0.06, 1, 1])
   plt.savefig("quiz_scores.png", dpi=150)
-  plt.show()
+  plt.close()
 
   print(f"\n📊 Chart saved → quiz_scores.png")
 
@@ -523,7 +523,7 @@ def administer_quiz():
   pdf.set_text_color(255, 255, 255)
   pdf.set_font("Helvetica", "B", 18)
   pdf.set_y(8)
-  pdf.cell(0, 12, "Course Coach — Quiz Report", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align="C")
+  pdf.cell(0, 12, "Course Coach - Quiz Report", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align="C")
 
   # Student info
   pdf.set_text_color(30, 30, 30)

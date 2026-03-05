@@ -41,6 +41,7 @@
       <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:20px;text-align:left">
         ⏱️ 20 seconds per question &nbsp;·&nbsp; 10 questions per domain &nbsp;·&nbsp; Answers revealed after each question
       </p>
+      <div id="form-error" style="display:none;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);color:#f87171;padding:10px 14px;border-radius:8px;font-size:0.88rem;font-weight:600;margin-bottom:14px;"></div>
       <button class="btn-start" id="start-btn" onclick="startQuiz()">Start Assessment →</button>
     </div>
 
@@ -187,8 +188,15 @@ function totalAnswered() {
 function startQuiz() {
   const name  = document.getElementById('name-input').value.trim();
   const email = document.getElementById('email-input').value.trim();
-  if (!name)  { alert('Please enter your name.'); return; }
-  if (!email) { alert('Please enter your email.'); return; }
+
+  // Inline error — works on file:// where alert() is blocked
+  const err = document.getElementById('form-error');
+  if (!name || !email) {
+    err.textContent = !name ? '⚠️ Please enter your name.' : '⚠️ Please enter your email.';
+    err.style.display = 'block';
+    return;
+  }
+  err.style.display = 'none';
   userName = name;
 
   // Pre-shuffle questions and options
