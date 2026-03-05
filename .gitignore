@@ -4,6 +4,9 @@ quiz_scores.csv
 *_quiz_report.pdf
 features.csv
 
+# Private / local-only files
+INTERVIEW_PREP.md
+
 # Database (local data only)
 course_coach.db
 
