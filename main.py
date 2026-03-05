@@ -550,7 +550,7 @@ def administer_quiz():
   pdf.set_draw_color(76, 175, 80)
   pdf.rect(10, pdf.get_y(), 190, 14, "DF")
   pdf.set_font("Helvetica", "B", 11)
-  pdf.cell(0, 14, f"  ✅ Recommended Course: {max_topic.upper()} (Score: {max_s}/10)",
+  pdf.cell(0, 14, f"  >> Recommended Course: {max_topic.upper()} (Score: {max_s}/10)",
            new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
   # Embed chart
